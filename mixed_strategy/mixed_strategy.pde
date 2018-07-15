@@ -307,7 +307,7 @@ Move getMove(int[][] b, int te)
       {
         int newScore = evaluateMove(b, te, x, y);
         // もしも新しい手の価値のほうが、今覚えている手の価値より高いならば
-        if( newScore > currentScore )
+        if( newScore >= currentScore )
         {
           // その手を覚え
           result.x = x;
@@ -318,6 +318,7 @@ Move getMove(int[][] b, int te)
       }
     }
   }
+  println("-----");
   result.value = currentScore;
   return result;
 }
@@ -346,7 +347,7 @@ int evaluateMove(int[][] b, int te, int x, int y)
   int positionPoint = tensu[x][y];
 
   // とりあえず、「場所の点数が高くて石をたくさんひっくり返せる手」を「良い手」と判定する。
-  result = positionPoint + stoneCount;
+  result = positionPoint * 3 - stoneCount - nextBestMove.value * 5 + 10 / (nextMoveCount + 1);
 
   println( "( " + x + "," + y + ") = " + result);
 
