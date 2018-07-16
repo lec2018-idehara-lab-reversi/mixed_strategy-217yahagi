@@ -327,10 +327,11 @@ Move getMove(int[][] b, int te)
 int evaluateMove(int[][] b, int te, int x, int y)
 {
   int result;
+  int inte;
 
   // 次の局面を作っておく
   int[][] nextBan = banCopy(b);
-  int mypoint,enemypoint;
+  int mypoint=0,enemypoint=0;
   
   put(nextBan, te, x, y);
 
@@ -339,17 +340,25 @@ int evaluateMove(int[][] b, int te, int x, int y)
   // そこに置くことでひっくり返せる相手の数
   int stoneCount = turn(b, te, x, y);
 
-  // 次の局面での相手の最善盤面得点（大きいほどこちらに不利）
-  Move nextBestMove = getBestMove(nextBan, -te);
+  for(int i=0;i<=4;i++){
+    if(i%2!=0) inte=te;
+    else inte=-te;
+    // 次の局面での相手の最善盤面得点（大きいほどこちらに不利）
+    Move nextBestMove = getBestMove(nextBan, inte);
 
-  // 次の局面での相手の着手可能点数
-  int nextMoveCount = countPlaceable(nextBan, -te);
-
+    // 次の局面での相手の着手可能点数
+    int nextMoveCount = countPlaceable(nextBan, inte);
+  
+    put(nextBan, inte, nextBestMove.x, nextBestMove.y);
+    
+    if(inte==te) mypoint+=nextBestMove.value+nextMoveCount;
+    else enemypoint+=nextBestMove.value+nextMoveCount;
+  }
   // 置こうとしている場所の点数
   int positionPoint = tensu[x][y];
 
   // とりあえず、「場所の点数が高くて石をたくさんひっくり返せる手」を「良い手」と判定する。
-  result = positionPoint + stoneCount - nextBestMove.value - nextMoveCount;
+  result = positionPoint + stoneCount + mypoint- enemypoint;
 
   println( "( " + x + "," + y + ") = " + result);
 
