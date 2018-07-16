@@ -330,6 +330,8 @@ int evaluateMove(int[][] b, int te, int x, int y)
 
   // 次の局面を作っておく
   int[][] nextBan = banCopy(b);
+  int mypoint,enemypoint;
+  
   put(nextBan, te, x, y);
 
   // 各種評価値
@@ -347,7 +349,7 @@ int evaluateMove(int[][] b, int te, int x, int y)
   int positionPoint = tensu[x][y];
 
   // とりあえず、「場所の点数が高くて石をたくさんひっくり返せる手」を「良い手」と判定する。
-  result = positionPoint + stoneCount;
+  result = positionPoint + stoneCount - nextBestMove.value - nextMoveCount;
 
   println( "( " + x + "," + y + ") = " + result);
 
